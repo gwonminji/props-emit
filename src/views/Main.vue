@@ -12,16 +12,20 @@
             <br><br>
             <button type="button" @click="props3Send()">child3한테 메시지 보내기</button>
             <div>child3에서 받은 메시지 : {{ emit3MSG }}</div>
+            <br><br>
+            <button type="button" @click="showModal()">modal 열기</button>
         </div>
         <Child :msg="msg" @event1="val => text = val" @event2="val => text2 = val" />
         <Child2 v-show="isVisible" @isVisible="val => isVisible = val" @modalText="val => modalMSG = val"/>        
         <Child3 :props3="props3" @emit3="val => emit3MSG = val"/>
+        <Modal v-show="isModal" :modalMsg="`모달에 띄울 메시지`" @isModal="val = isModal = val"/>
     </div>
 </template>
 <script>
 import Child from '@/components/Child.vue'
 import Child2 from '@/components/Child2.vue'
 import Child3 from '@/components/Child3.vue'
+import Modal from '@/components/Modal.vue'
 
 import { ref } from 'vue';
 
@@ -29,7 +33,8 @@ export default {
     components:{
         Child,
         Child2,
-        Child3
+        Child3,
+        Modal
     },
     setup() {
         let msg = ref('');
@@ -41,6 +46,8 @@ export default {
         let props3 = ref('');
         let emit3MSG = ref('');
 
+        let isModal = ref(false);
+
         const openChild2 = () => {
             isVisible.value = !isVisible.value;
         }
@@ -49,8 +56,12 @@ export default {
             props3.value = '안녕 child3 ~~'
         }
 
+        const showModal = () => {
+            isModal.value = true;
+        }
+
         return{
-            msg, text, text2, isVisible, openChild2, modalMSG, props3, props3Send, emit3MSG
+            msg, text, text2, isVisible, openChild2, modalMSG, props3, props3Send, emit3MSG, isModal, showModal
         }
     },
 }
